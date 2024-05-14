@@ -160,10 +160,6 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                     <div class="card-body">
                         <h5 class="card-title">Add details</h5>
                         <form method="post">
-                        <div class="form-group">
-                                <label for="add_user">Username</label>
-                                <input type="text" class="form-control" id="add_user" name="add_user" placeholder="Enter username">
-                            </div>
                             <div class="form-group">
                                 <label for="district">Enter the names of the departments in CPC</label>
                                 <input type="text" class="form-control" id="district" name="departments" placeholder=" ">
