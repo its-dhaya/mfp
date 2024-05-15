@@ -77,6 +77,17 @@ if(isset($_POST["submit"])) {
     }
 }
 
+// Function to post link to the dashboard
+function postLink($mfp_name, $category, $form_link, $conn) {
+    $query = "INSERT INTO dashboard_links (mfp_name, category, link) VALUES ('$mfp_name', '$category', '$form_link')";
+    
+    if(mysqli_query($conn, $query)) {
+        echo "<script>alert('Link shared successfully');</script>";
+    } else {
+        echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
+    }
+}
+
 // Check if the 'view' parameter is set in the URL
 if(isset($_GET['view']) && $_GET['view'] == 'true') {
     // Call the function to display MFP data
@@ -84,7 +95,6 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
     exit; // Stop executing the rest of the code after displaying data
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -160,9 +170,7 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                                     <div class="form-group">
                                         <label for="form">Paste the link here</label>
                                         <input type="text" class="form-control" name="form_link" id="form_link" placeholder="Google Form Link">
-
                                     </div>
-                                    
                                 </div>
                                 <button type="submit" name="submit" class="btn btn-primary">Save</button>
                                 <a href="<?php echo $_SERVER["PHP_SELF"]."?view=true"; ?>" class="btn btn-primary">View</a>
@@ -191,7 +199,6 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                                 <option value="MFP Farmers">MFP Farmers</option>
                                 <option value="MFP Retailers">MFP Retailers</option>
                             </select> 
- 
                             <br>
                             <div class="form-group1">
                                 <button class="btn btn-primary" onclick="viewDetails('MFP')">View Details</button>
@@ -211,8 +218,8 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="category_select">Select the Category</label>
-                            <select class="form-control" id="category_select">
+                            <label for="category_select_mu">Select the Category</label>
+                            <select class="form-control" id="category_select_mu">
                                 <option value="MU Administrators">MU Administrators</option>
                                 <option value="MU Employee">MU Employee</option>
                                 <option value="MU Farmers/Fisher Men">MU Farmers/Fisher Men</option>
@@ -231,8 +238,8 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                             <input type="text" class="form-control" id="link_sent_date" placeholder="dd/mm/yyyy">
                         </div>
                         <div class="form-group">
-                            <label for="category_select">Select the Category</label>
-                            <select class="form-control" id="category_select">
+                            <label for="category_select_assessment">Select the Category</label>
+                            <select class="form-control" id="category_select_assessment">
                                 <option value="MFP Administrator">MFP Administrator</option>
                                 <option value="MFP Employee">MFP Employee</option>
                                 <option value="MFP Farmers">MFP Farmers</option>
@@ -256,17 +263,25 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        function viewDetails(type) {
-            // Function to handle viewing details based on MFP or MU selection
-            // You can implement this function as per your requirement
-            console.log('Viewing details for ' + type);
-        }
+    function postLink(type) {
+    var mfp_name = document.getElementById("mfp_select").value;
+    var category = document.getElementById("category_select").value;
+    var form_link = document.getElementById("form_link").value;
 
-        function postLink(type) {
-            // Function to handle posting link to dashboard based on MFP or MU selection
-            // You can implement this function as per your requirement
-            console.log('Posting link to dashboard for ' + type);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'mofpi_admin_dash.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            alert('Link shared successfully');
+            // Redirect to the view page for the selected MFP
+            window.location.href = "<?php echo $_SERVER["PHP_SELF"]."?view=true&mfp_name="; ?>" + encodeURIComponent(mfp_name);
+        } else {
+            console.error('Error posting link: ' + xhr.statusText);
         }
+    };
+    xhr.send('submit=true&mfp_name=' + encodeURIComponent(mfp_name) + '&category=' + encodeURIComponent(category) + '&form_link=' + encodeURIComponent(form_link));
+}
     </script>
 </body>
 </html>

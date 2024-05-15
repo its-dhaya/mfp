@@ -1,13 +1,22 @@
 <?php
 require 'config.php';
 
-// Start session
+function getMFPNames($conn) {
+    $query = "SELECT DISTINCT spv_name FROM mfp_admin";
+    $result = mysqli_query($conn, $query);
+    $options = "";
+    while ($row = mysqli_fetch_assoc($result)) {
+        $options .= "<option value='".$row['spv_name']."'>".$row['spv_name']."</option>";
+    }
+    return $options;
+}
 
+// Insert data into the database when form is submitted
 if(isset($_POST["submit"])) {
     // Retrieve the username of the currently logged-in user
     $add_user = $_SESSION['username']; // Assuming username is stored in the session
-    
     // Retrieve form data
+    $mfp_name = $_POST["mfp_name"];
     $departments = $_POST["departments"];
     $num_employees = $_POST["num_employees"];
     $num_farmers = $_POST["num_farmers"];
@@ -21,7 +30,7 @@ if(isset($_POST["submit"])) {
     $manufacturing_units = $_POST["manufacturing_units"];
 
     // Insert data into the database
-    $query = "INSERT INTO mfp_ad_dash (add_user, departments, num_employees, num_farmers, num_distributors, num_facilities, transport_details, num_ppc, num_cc, cc_names, num_manufacturing_units, manufacturing_units) VALUES ('$add_user', '$departments', '$num_employees', '$num_farmers', '$num_distributors', '$num_facilities', '$transport_details', '$num_ppc', '$num_cc', '$cc_names', '$num_manufacturing_units', '$manufacturing_units')";
+    $query = "INSERT INTO mfp_ad_dash (add_user, mfp_name, departments, num_employees, num_farmers, num_distributors, num_facilities, transport_details, num_ppc, num_cc, cc_names, num_manufacturing_units, manufacturing_units, form_link) VALUES ('$add_user', '$mfp_name', '$departments', '$num_employees', '$num_farmers', '$num_distributors', '$num_facilities', '$transport_details', '$num_ppc', '$num_cc', '$cc_names', '$num_manufacturing_units', '$manufacturing_units', '$form_link')";
 
     if(mysqli_query($conn, $query)) {
         echo "<script>alert('Data saved successfully');</script>";
@@ -54,6 +63,7 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                     <thead>
                         <tr>
                             <th>User</th>
+                            <th>MFP Name</th>
                             <th>Departments</th>
                             <th>No. of Employees</th>
                             <th>No. of Farmers</th>
@@ -65,6 +75,7 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                             <th>CC Names</th>
                             <th>No. of Manufacturing Units</th>
                             <th>Manufacturing Units</th>
+                            <th>Google Form Link</th> <!-- Add column for Google Form Link -->
                         </tr>
                     </thead>
                     <tbody>
@@ -72,6 +83,7 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                         while($row = mysqli_fetch_assoc($result)) {
                             echo "<tr>";
                             echo "<td>".$row['add_user']."</td>";
+                            echo "<td>".$row['mfp_name']."</td>";
                             echo "<td>".$row['departments']."</td>";
                             echo "<td>".$row['num_employees']."</td>";
                             echo "<td>".$row['num_farmers']."</td>";
@@ -83,6 +95,7 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                             echo "<td>".$row['cc_names']."</td>";
                             echo "<td>".$row['num_manufacturing_units']."</td>";
                             echo "<td>".$row['manufacturing_units']."</td>";
+                            echo "<td>".$row['form_link']."</td>"; 
                             echo "</tr>";
                         }
                         ?>
@@ -160,6 +173,13 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                     <div class="card-body">
                         <h5 class="card-title">Add details</h5>
                         <form method="post">
+                        <div class="form-group">
+                                <label for="mfp_name">MFP Name:</label>
+                                <select class="form-control" id="mfp_name" name="mfp_name" required>
+                                    <option value="">Select MFP</option>
+                                    <?php echo getMFPNames($conn); ?>
+                                </select>
+                            </div>
                             <div class="form-group">
                                 <label for="district">Enter the names of the departments in CPC</label>
                                 <input type="text" class="form-control" id="district" name="departments" placeholder=" ">
@@ -205,8 +225,8 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                                 <label for="vacant">Enter the Manufacturing Units </label>
                                 <input type="text" class="form-control" id="vacant" name="manufacturing_units" placeholder=" ">
                             </div>
+
                             <!-- Rest of the form fields -->
- 
                             <button type="submit" name="submit" class="btn btn-primary btn-block">Save</button>
                         </form>
                     </div>
@@ -230,5 +250,27 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function postLink(type) {
+            var mfp_name = document.getElementById("mfp_select").value;
+            var category = document.getElementById("category_select").value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'fetch_link.php?mfp_name=' + encodeURIComponent(mfp_name) + '&category=' + encodeURIComponent(category), true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var form_link = xhr.responseText.trim(); // Trim to remove any leading/trailing whitespace
+                    if (form_link !== "Form link not found" && form_link !== "Invalid request") {
+                        window.location.href = "mofpi_admin_dash.php?mfp_name=" + encodeURIComponent(mfp_name) + "&category=" + encodeURIComponent(category) + "&form_link=" + encodeURIComponent(form_link);
+                    } else {
+                        console.error('Error: ' + form_link);
+                    }
+                } else {
+                    console.error('Error fetching form link: ' + xhr.statusText);
+                }
+            };
+            xhr.send();
+        }
+    </script>
 </body>
 </html>
