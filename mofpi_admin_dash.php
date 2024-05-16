@@ -179,6 +179,7 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                     </div>
                     <div class="col-md-6">
                         <br>
+                        <form method="get" action="dashboard_links.php"> 
                         <div class="form-group">
                             <label for="mfp_select">Select the MFP</label>
                             <select class="form-control" id="mfp_select" name="mfp_name">
@@ -193,7 +194,7 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                         </div>
                         <div class="form-group">
                             <label for="category_select">Select the Category</label>
-                            <select class="form-control" id="category_select">
+                            <select class="form-control" id="category_select" name="category">
                                 <option value="MFP Administrator">MFP Administrator</option>
                                 <option value="MFP Employee">MFP Employee</option>
                                 <option value="MFP Farmers">MFP Farmers</option>
@@ -202,9 +203,13 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                             <br>
                             <div class="form-group1">
                                 <button class="btn btn-primary" onclick="viewDetails('MFP')">View Details</button>
-                                <button class="btn btn-success" onclick="postLink('MFP')">Post Link to Dashboard</button>
+                                <button class="btn btn-primary" onclick="redirectToDashboardLinks()"
+                                type="submit">PostLink</button>
+                                
+
                             </div>
                         </div>
+                        </form>
                         <div class="form-group">
                             <label for="mu_select">Select the MU</label>
                             <select class="form-control" id="mu_select" name="mu_name">
@@ -229,7 +234,8 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
                             <br>
                             <div class="form-group1">
                                 <button class="btn btn-primary" onclick="viewDetails('MU')">View Details</button>
-                                <button class="btn btn-success" onclick="postLink('MU')">Post Link to Dashboard</button>
+                                <a href="dashboard_links.php?mfp_name=<?php echo urlencode($mfp_name); ?>&category=<?php echo urlencode($category); ?>&form_link=<?php echo urlencode($form_link); ?>" class="btn btn-primary">PostLink</a>
+
                             </div>
                         </div>
                         <h2>View Assessment Data</h2>
@@ -263,25 +269,11 @@ if(isset($_GET['view']) && $_GET['view'] == 'true') {
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-    function postLink(type) {
-    var mfp_name = document.getElementById("mfp_select").value;
-    var category = document.getElementById("category_select").value;
-    var form_link = document.getElementById("form_link").value;
+    function redirectToDashboardLinks() {
+        // Redirect to dashboard_links.php
+        window.location.href = "dashboard_links.php";
+    }
+</script>
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'mofpi_admin_dash.php', true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            alert('Link shared successfully');
-            // Redirect to the view page for the selected MFP
-            window.location.href = "<?php echo $_SERVER["PHP_SELF"]."?view=true&mfp_name="; ?>" + encodeURIComponent(mfp_name);
-        } else {
-            console.error('Error posting link: ' + xhr.statusText);
-        }
-    };
-    xhr.send('submit=true&mfp_name=' + encodeURIComponent(mfp_name) + '&category=' + encodeURIComponent(category) + '&form_link=' + encodeURIComponent(form_link));
-}
-    </script>
 </body>
 </html>

@@ -29,7 +29,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      padding: 2rem 9%;
+      padding: 2rem 5%; /* Adjusted padding for smaller screens */
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -41,20 +41,16 @@
       text-decoration: none;
       font-weight: 700;
       cursor: pointer;
-      font-size: 1.7rem;
+      font-size: 1.5rem; /* Adjusted font size for smaller screens */
     }
 
     section {
-      padding: 10rem 9% 2rem;
-      /* Adjusted padding to accommodate fixed header */
+      padding: 8rem 5% 2rem; /* Adjusted padding for smaller screens */
       min-height: 100vh;
-      /* Added padding to separate sections */
       display: flex;
       justify-content: center;
       align-items: center;
-      /* Align items to center */
       text-align: center;
-      /* Align text to center */
     }
 
     .navbar a:hover,
@@ -67,29 +63,26 @@
       text-decoration: none;
       font-weight: 500;
       display: inline-block;
-      margin-left: 4rem;
-      font-size: 1.4rem;
+      margin-left: 2rem; /* Adjusted margin for smaller screens */
+      font-size: 1.2rem; /* Adjusted font size for smaller screens */
       transition: .2s;
     }
 
     .all-heading {
-      font-size: 3rem;
-      /* Adjusted font size */
+      font-size: 2rem; /* Adjusted font size for smaller screens */
       color: #ef6e12;
       text-align: left;
-      /* Align heading to top left */
-      margin-left: 9%;
-      /* Adjusted margin */
+      margin-left: 5%; /* Adjusted margin for smaller screens */
     }
 
     .about-content {
-      font-size: 1.6rem;
+      font-size: 1.2rem; /* Adjusted font size for smaller screens */
       color: #fff;
-      margin-top: 2rem;
+      margin-top: 1rem; /* Adjusted margin for smaller screens */
     }
 
     .contact-form {
-      max-width: 500px;
+      max-width: 90%; /* Adjusted maximum width for smaller screens */
       margin: 0 auto;
     }
 
@@ -97,9 +90,7 @@
       transition:  0.5s ease-in-out;
       margin: 0;
       background-color: #166d3b;
-background-image: linear-gradient(147deg, #166d3b 0%, #000000 74%);
-
-
+      background-image: linear-gradient(147deg, #166d3b 0%, #000000 74%);
     }
 
     .intro {
@@ -109,7 +100,6 @@ background-image: linear-gradient(147deg, #166d3b 0%, #000000 74%);
       width: 100%;
       height: 100vh;
       background-color: transparent;
-      /* Set background color to transparent */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -140,10 +130,36 @@ background-image: linear-gradient(147deg, #166d3b 0%, #000000 74%);
     .stay {
       opacity: 1;
     }
-    .text-center{
+
+    .text-center {
       margin-bottom: 170px;
     }
-    
+
+    /* Media query for smaller screens */
+    @media (max-width: 768px) {
+      .header {
+        padding: 1rem 5%; /* Adjusted padding for smaller screens */
+      }
+
+      .Logo {
+        font-size: 1.3rem; /* Adjusted font size for smaller screens */
+      }
+
+      .navbar a {
+        margin-left: 1rem; /* Adjusted margin for smaller screens */
+        font-size: 1rem; /* Adjusted font size for smaller screens */
+      }
+
+      .all-heading {
+        font-size: 1.5rem; /* Adjusted font size for smaller screens */
+        margin-left: 5%; /* Adjusted margin for smaller screens */
+      }
+
+      .about-content {
+        font-size: 1rem; /* Adjusted font size for smaller screens */
+        margin-top: 0.5rem; /* Adjusted margin for smaller screens */
+      }
+    }
   </style>
 </head>
 
