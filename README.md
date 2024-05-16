@@ -22,7 +22,7 @@ To run this application, you need:
 
 1. Clone or download the repository.
 2. Place the project files in the root directory of your XAMPP server (usually `htdocs`).
-3. Start the XAMPP server and ensure that SQLite is enabled.
+3. Start the XAMPP server and ensure that SQL is enabled.
 
 ## Usage
 
@@ -33,7 +33,8 @@ Example:
 
 ## Credits
 
-This project was created by [Elanthirayann](https://github.com/Elanthirayann).
+This project was created by
+
 
 ## License
 
